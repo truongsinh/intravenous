@@ -14,61 +14,61 @@ It can be loaded as an CommonJS/Node.JS or AMD module. If you don't have either,
 
 ### How do I use it?
 1. Create a container like this:
-```javascript
+{% highlight javascript %}
 var container = intravenous.create();
-```
+{% endhighlight %}
 
 1. Next, register some services (can be a constructor function or just an object):
-```javascript
+{% highlight javascript %}
 container.register("logger", loggerClass);
 container.register("someGlobalData", { data: "hello" });
-```
+{% endhighlight %}
 
 1. Then, define a class and its dependencies
-```javascript
+{% highlight javascript %}
 var myClass = function(logger, someGlobalData) {
   /* use logger here */
 };
 myClass.$inject = ["logger", "someGlobalData";
 container.register("myClass", myClass);
-```
+{% endhighlight %}
 
 1. Finally, get an instance to this class through the container:
-```javascript
+{% highlight javascript %}
 var myInstance = container.get("myClass");
-```
+{% endhighlight %}
 
 You will now have an instance of `myClass` with all its dependencies resolved.
 
 ### What if a service doesn't exist?
 It will throw an exception. Alternatively, you can specify optional (or nullable) dependencies by using the `?` suffix, like so:
 
-```javascript
+{% highlight javascript %}
 myClass.$inject = ["logger", "optionalDependency?"];
-```
+{% endhighlight %}
 
 In this case `optionalDependency` will be injected as `null` if it doesn't exist.
 
 ### How can I control object disposal?
 Pass in an `onDispose` handler when you create the container:
-```javascript
+{% highlight javascript %}
 var container = intravenous.create({
   onDispose: function(obj, serviceName) {
     obj.yourDisposeFunction();
   }
 });
-```
+{% endhighlight %}
 
 Now, whenever you are done with your container, call `dispose` on the container and it will call your `onDispose` callback for every object that needs to be disposed.
 
 ### What if I want to dispose only parts of the container, instead of everything?
 Use a nested container and dispose that instead:
-```javascript
+{% highlight javascript %}
 var container = intravenous.create(/* onDispose handler here */);
 var nested = container.create();
 var myInstance = nested.get("myClass");
 nested.dispose();
-```
+{% endhighlight %}
 
 You can also register additional services on the nested container. They will override services registered on the parent container.
 
@@ -79,12 +79,12 @@ Please note that `container.create()` is not the same as `intravenous.create()`.
 ### But how can I get access to the main intravenous container?
 Take a dependency on the service called `container`, like so:
 
-```javascript
+{% highlight javascript %}
 var myClass = function(container) {
   var nested = container.create();
 }
 myClass.$inject = ["container", /* ... other dependencies */];
-```
+{% endhighlight %}
 
 ### How can I control the lifecycle of a service?
 When registering a service using `register` it will default to the `perRequest` lifecycle. There are a number of different lifecycles you can use, though. They are listed below.
@@ -100,21 +100,21 @@ The available lifecycles:
 3. `singleton`: As long as the container is not disposed, `foo` will only be created once. It will also be reused across multiple calls to `container.get`.
 
 The lifecycle is specified as the third argument to `register`:
-```javascript
+{% highlight javascript %}
 container.register("logger", loggerClass, "singleton");
-```
+{% endhighlight %}
 
 ### How can I specify additional arguments?
 When you want to pass additional to your class, simply add them to the `container.get` call:
 
-```javascript
+{% highlight javascript %}
 var myClass = function(logger, extra) {
   alert(extra);
 };
 myClass.$inject = ["logger"];
 container.register("myClass", myClass);
 var myInstance = container.get("myClass", "hello!");
-```
+{% endhighlight %}
 
 This example will alert `hello!`.
 
