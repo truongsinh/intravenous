@@ -625,6 +625,7 @@ blockquote {
 code {
   font-family: "Lucida Sans", Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal;
   color: #efefef;
+  background: #444;
   font-size: 13px;
   margin: 0 4px;
   padding: 4px 6px;
