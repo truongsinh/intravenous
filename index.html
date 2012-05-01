@@ -38,13 +38,9 @@
           <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
         </div>
 
-        <h1>Intravenous</h1>
-
-<hr><p>A lightweight zero-dependency <a href="http://martinfowler.com/articles/injection.html">inversion of control container</a> for Javascript.</p>
-
 <h3>What? Why?</h3>
 
-<p>If you are building complex applications it can become very difficult to manage object lifetimes and dependencies. For instance, if you're building a UI you may want to create a dialog. The dialog's model may have dependencies on a logger, Growlesque notification thing, etc. It'll probably also contain some sub-models to display inside the dialog. You need to track all these dependencies and when the dialog closes you want to dispose some of the models (but not all, since the logger is probably a singleton) and so on... Complex! Unless you use an IoC container like this one.</p>
+<p>If you are building complex applications it can become very difficult to manage object lifetimes and dependencies. For instance, if you're building a UI you may want to create a dialog. The dialog's model may have dependencies on a logger, Growlesque notification thing, etc. It'll probably also contain some sub-models to display inside the dialog. You need to track all these dependencies and when the dialog closes you want to dispose some of the models (but not all, since the logger is probably a singleton) and so on... Complex! Unless you use an <a href="http://martinfowler.com/articles/injection.html">IoC container</a> like this one.</p>
 
 <p>With <em>Intravenous</em> you create a <em>container</em> and tell this container which services are available in your system. Then, when you have class that wants to use these services you simply list them as dependencies. You tell the container to create an instance of your class and all dependencies will be automatically resolved (even if your depedencies have dependencies of their own).</p>
 
@@ -52,7 +48,7 @@
 
 <h3>How do I include it?</h3>
 
-<p>It can be loaded as an CommonJS/Node.JS or AMD module. If you don't have either, it will be available as <code>window.intravenous</code>. It has no dependencies on other libraries.</p>
+<p>It can be loaded as a CommonJS/Node.JS or AMD module. If you don't have either, it will be available as <code>window.intravenous</code>. It has no dependencies on other libraries.</p>
 
 <h3>How do I use it?</h3>
 
@@ -178,7 +174,7 @@
 
 <h3>How can I specify additional arguments?</h3>
 
-<p>When you want to pass additional to your class, simply add them to the <code>container.get</code> call:</p>
+<p>When you want to pass additional arguments to your class, simply add them to the <code>container.get</code> call:</p>
 
 <div class="highlight">
 <pre><span class="kd">var</span> <span class="nx">myClass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">logger</span><span class="p">,</span> <span class="nx">extra</span><span class="p">)</span> <span class="p">{</span>
