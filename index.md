@@ -14,27 +14,24 @@ It can be loaded as an CommonJS/Node.JS or AMD module. If you don't have either,
 
 ### How do I use it?
 1. Create a container like this:
-{% highlight javascript %}
+	{% highlight javascript %}
 var container = intravenous.create();
 {% endhighlight %}
-
 1. Next, register some services (can be a constructor function or just an object):
-{% highlight javascript %}
+	{% highlight javascript %}
 container.register("logger", loggerClass);
 container.register("someGlobalData", { data: "hello" });
 {% endhighlight %}
-
 1. Then, define a class and its dependencies
-{% highlight javascript %}
+	{% highlight javascript %}
 var myClass = function(logger, someGlobalData) {
   /* use logger here */
 };
 myClass.$inject = ["logger", "someGlobalData";
 container.register("myClass", myClass);
 {% endhighlight %}
-
 1. Finally, get an instance to this class through the container:
-{% highlight javascript %}
+	{% highlight javascript %}
 var myInstance = container.get("myClass");
 {% endhighlight %}
 
