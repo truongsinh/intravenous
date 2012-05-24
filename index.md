@@ -75,12 +75,12 @@ All transient (i.e. non-singleton) dependencies that `myWidget` needs will also 
 Additionally, it is very easy to mock this factory when you are doing unit testing.
 
 ### When using the factory, can I override dependencies?
-Yes, let's say the widget (in the above example) also has a dependency on the `foo` service. If you want to override the `foo` service, you use the `with` syntax:
+Yes, let's say the widget (in the above example) also has a dependency on the `foo` service. If you want to override the `foo` service, you use the `use` syntax:
 
 {% highlight javascript %}
 var myClass = function(widgetFactory) {
-	this.myWidget = widgetFactory.with(foo, "bar!").get();
-	this.myWidget2 = widgetFactory.with(foo, "bar2!").get();
+	this.myWidget = widgetFactory.use(foo, "bar!").get();
+	this.myWidget2 = widgetFactory.use(foo, "bar2!").get();
 	/* ... */
 	widgetFactory.dispose(this.myWidget);
 	widgetFactory.dispose(this.myWidget2);
