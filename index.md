@@ -62,12 +62,23 @@ Now, whenever you are done with your container, call `dispose` on the container 
 You can have Intravenous create a factory for you by using the `!` or `Factory` suffix, like so:
 
 {% highlight javascript %}
+var widget = function() {
+};
+widget.$inject = ["foo"];
+container.register("widget", widget);
+
 var myClass = function(widgetFactory) {
 	this.myWidget = widgetFactory.get();
 	/* ... */
 	widgetFactory.dispose(this.myWidget);
 };
 myClass.$inject = ["widgetFactory"];
+container.register("myClass", myClass);
+
+/*
+	You can now do something like:
+	var instance = container.get("myClass");
+*/	
 {% endhighlight %}
 
 All transient (i.e. non-singleton) dependencies that `myWidget` needs will also be disposed when you dispose `myWidget`. *This is a very powerful feature!* It means that if you are dynamically creating these widgets, the lifetimes of all the widget's dependencies are automatically scoped to the lifetime of the widget!
@@ -78,13 +89,21 @@ Additionally, it is very easy to mock this factory when you are doing unit testi
 Yes, let's say the widget (in the above example) also has a dependency on the `foo` service. If you want to override the `foo` service, you use the `use` syntax:
 
 {% highlight javascript %}
-var myClass = function(widgetFactory) {
-	this.myWidget = widgetFactory.use(foo, "bar!").get();
-	this.myWidget2 = widgetFactory.use(foo, "bar2!").get();
-	/* ... */
-	widgetFactory.dispose(this.myWidget);
-	widgetFactory.dispose(this.myWidget2);
+var widget = function(foo) {
+	this.foo = foo;
 };
+widget.$inject = ["foo"];
+container.register("widget", widget);
+
+var myClass = function(widgetFactory) {
+	this.myWidget = widgetFactory.use(foo, "value1").get();
+	this.myWidget2 = widgetFactory.use(foo, "value2").get();
+	/*
+		this.myWidget.foo will now be "value1"
+		this.myWidget2.foo will now be "value2"
+	*/
+};
+container.register("myClass", myClass);
 {% endhighlight %}
 
 The syntax is chainable, so you can override as many dependencies as you like.
