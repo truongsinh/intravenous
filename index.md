@@ -58,6 +58,49 @@ var container = intravenous.create({
 
 Now, whenever you are done with your container, call `dispose` on the container and it will call your `onDispose` callback for every object that needs to be disposed.
 
+### How can I dynamically create new instances of a service?
+You can have Intravenous create a factory for you by using the `!` or `Factory` suffix, like so:
+
+{% highlight javascript %}
+var myClass = function(widgetFactory) {
+	this.myWidget = widgetFactory.get();
+	/* ... */
+	widgetFactory.dispose(this.myWidget);
+};
+myClass.$inject = ["widgetFactory"];
+{% endhighlight %}
+
+All transient (i.e. non-singleton) dependencies that `myWidget` needs will also be disposed when you dispose `myWidget`. *This is a very powerful feature!* It means that if you are dynamically creating these widgets, the lifetimes of all the widget's dependencies are automatically scoped to the lifetime of the widget!
+
+Additionally, it is very easy to mock this factory when you are doing unit testing.
+
+### When using the factory, can I override dependencies?
+Yes, let's say the widget (in the above example) also has a dependency on the `foo` service. If you want to override the `foo` service, you use the `with` syntax:
+
+{% highlight javascript %}
+var myClass = function(widgetFactory) {
+	this.myWidget = widgetFactory.with(foo, "bar!").get();
+	this.myWidget2 = widgetFactory.with(foo, "bar2!").get();
+	/* ... */
+	widgetFactory.dispose(this.myWidget);
+	widgetFactory.dispose(this.myWidget2);
+};
+{% endhighlight %}
+
+The syntax is chainable, so you can override as many dependencies as you like.
+
+### How can I get access to the main intravenous container?
+First, make sure you're doing this for the right reasons. Using the container as a service locator is an [anti-pattern](http://blog.ploeh.dk/2010/02/03/ServiceLocatorIsAnAntiPattern.aspx).
+
+If you really want to, take a dependency on the service called `container`, like so:
+
+{% highlight javascript %}
+var myClass = function(container) {
+  var nested = container.create();
+}
+myClass.$inject = ["container", /* ... other dependencies */];
+{% endhighlight %}
+
 ### What if I want to dispose only parts of the container, instead of everything?
 Use a nested container and dispose that instead:
 {% highlight javascript %}
@@ -72,16 +115,6 @@ You can also register additional services on the nested container. They will ove
 Creating a nested container is very lightweight so it's highly recommended to use them.
 
 Please note that `container.create()` is not the same as `intravenous.create()`. The first creates a nested container, the second creates a completely new intravenous container. Typically in your application you will only need a single intravenous container.
-
-### But how can I get access to the main intravenous container?
-Take a dependency on the service called `container`, like so:
-
-{% highlight javascript %}
-var myClass = function(container) {
-  var nested = container.create();
-}
-myClass.$inject = ["container", /* ... other dependencies */];
-{% endhighlight %}
 
 ### How can I control the lifecycle of a service?
 When registering a service using `register` it will default to the `perRequest` lifecycle. There are a number of different lifecycles you can use, though. They are listed below.
@@ -116,10 +149,10 @@ var myInstance = container.get("myClass", "hello!");
 This example will alert `hello!`.
 
 ### Can I also create instances of services I haven't yet registered?
-No, not yet.
+No. You explicitly need to register all services you need.
 
 ### Where did you get inspiration from?
-The `$inject` syntax was inspired by [AngularJS](http://angularjs.org/). The nested container was a good idea pilfered from [StructureMap](http://www.structuremap.net).
+The `$inject` syntax was inspired by [AngularJS](http://angularjs.org/). The nested container was a good idea pilfered from [StructureMap](http://www.structuremap.net). The person making sense of DI in general is [Mark Seemann](http://blog.ploeh.dk).
 
 ### What's the license?
 [MIT](http://www.opensource.org/licenses/mit-license.php).
