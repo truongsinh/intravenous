@@ -178,3 +178,5 @@ The `$inject` syntax was inspired by [AngularJS](http://angularjs.org/). The nes
 
 ### I want to report bugs or submit pull requests!
 Use the [GitHub](http://github.com/RoyJacobs/intravenous) page.
+
+Join the discussions in the [Google Group](https://groups.google.com/d/forum/intravenousjs) as well.
