@@ -5,7 +5,7 @@ title: Intravenous
 ### What? Why?
 If you are building complex applications it can become very difficult to manage object lifetimes and dependencies. For instance, if you're building a UI you may want to create a dialog. The dialog's model may have dependencies on a logger, Growlesque notification thing, etc. It'll probably also contain some sub-models to display inside the dialog. You need to track all these dependencies and when the dialog closes you want to dispose some of the models (but not all, since the logger is probably a singleton) and so on... Complex! Unless you use an IoC container like this one.
 
-With *Intravenous* you create a _container_ and tell this container which services are available in your system. Then, when you have class that wants to use these services you simply list them as dependencies. You tell the container to create an instance of your class and all dependencies will be automatically resolved (even if your depedencies have dependencies of their own).
+With *Intravenous* you create a _container_ and tell this container which services are available in your system. Then, when you have a class that wants to use these services you simply list them as dependencies. You tell the container to create an instance of your class and all dependencies will be automatically resolved (even if your depedencies have dependencies of their own).
 
 You can also create something called a _nested container_. In case of the dialog sample you would use this nested container to create all the view models that are only relevant during the dialog's lifetime. When the dialog closes, you can dispose the nested container and automatically all of the objects created by that container will be disposed as well. Still sounds complex? Read on!
 
